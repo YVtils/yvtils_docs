@@ -1,0 +1,9 @@
+User-agent: *
+
+# Allow all pages by default
+Allow: /
+
+# Disallow specific pages
+Disallow: /imprint
+Disallow: /privacy
+Disallow: /404
