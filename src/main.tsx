@@ -14,36 +14,8 @@ const router = createBrowserRouter([
         Component: App,
     },
     {
-        path: "/yvsmp",
-        Component: React.lazy(() => import('./pages/YVSMP'))
-    },
-    {
-        path: "/projects/yvtils-smp",
-        Component: React.lazy(() => import('./pages/projects/YVtils-SMP'))
-    },
-    {
-        path: "/projects/yvtils-discord",
-        Component: React.lazy(() => import('./pages/projects/YVtils-Discord'))
-    },
-    {
-        path: "/projects/yvtils-multiMine",
-        Component: React.lazy(() => import('./pages/projects/YVtils-MultiMine'))
-    },
-    {
-        path: "/projects/yvtils-regions",
-        Component: React.lazy(() => import('./pages/projects/YVtils-Regions'))
-    },
-    {
         path: "/redirect/*",
         Component: React.lazy(() => import('./pages/Redirect')),
-    },
-    {
-        path: "/imprint",
-        Component: React.lazy(() => import('./pages/Imprint')),
-    },
-    {
-        path: "/privacy",
-        Component: React.lazy(() => import('./pages/Privacy')),
     },
     {
         path: "/*",
