@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://docs.yvtils.net/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/colorcode/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/colorcode/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/colorcode/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/mm/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/mm/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/mm/language/en.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/mm/language/en.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/language/en.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/mm/multiMine/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/mm/multiMine/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/multiMine/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/permissions/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/permissions/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/permissions/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/admin/mutedPlayers.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/admin/mutedPlayers.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/admin/mutedPlayers.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/discord/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/discord/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/discord/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/discord/save.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/discord/save.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/discord/save.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/fusions/fusionName.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/fusions/fusionName.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/fusions/fusionName.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/language/en.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/language/en.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/language/en.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/multiMine/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/multiMine/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/multiMine/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/server/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/server/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/server/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/status/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/status/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/status/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/status/save.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/status/save.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/status/save.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/waypoints/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/waypoints/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/waypoints/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/smp/waypoints/save.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/waypoints/save.yml/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/waypoints/save.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/colorcode/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/colorcode/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/colorcode/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/mm/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/mm/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/mm/language/de.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/language/de.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/mm/multiMine/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/multiMine/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/mm/multiMine/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/permissions/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/permissions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/permissions/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/admin/mutedPlayers.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/admin/mutedPlayers.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/admin/mutedPlayers.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/discord/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/discord/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/discord/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/discord/save.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/discord/save.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/discord/save.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/fusions/fusionName.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/fusions/fusionName.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/fusions/fusionName.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/language/de.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/language/de.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/multiMine/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/multiMine/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/multiMine/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/server/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/server/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/server/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/status/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/status/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/status/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/status/save.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/status/save.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/status/save.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/waypoints/config.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/waypoints/config.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/waypoints/config.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/waypoints/save.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/waypoints/save.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/waypoints/save.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/mm/language/en.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/mm/language/en.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/mm/language/en.yml/"/>
+    </url>
+    <url>
+        <loc>https://docs.yvtils.net/de/smp/language/en.yml/</loc>
+        <lastmod>2025-11-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://docs.yvtils.net/de/smp/language/en.yml/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://docs.yvtils.net/smp/language/en.yml/"/>
+    </url>
+</urlset>
