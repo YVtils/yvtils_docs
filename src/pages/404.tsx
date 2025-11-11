@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Heading, ThemeProvider, Text, Button, Spacer } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
+import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -40,7 +41,10 @@ const App = () => {
         <ThemeProvider>
             <div className="app">
                 <Header />
-                <Content />
+                <div className="main_layout">
+                    <Sidebar />
+                    <Content />
+                </div>
                 <Footer />
             </div>
         </ThemeProvider>

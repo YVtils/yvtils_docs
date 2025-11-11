@@ -14,6 +14,10 @@ const router = createBrowserRouter([
         Component: App,
     },
     {
+        path: "/faq",
+        Component: React.lazy(() => import('./pages/Placeholder')),
+    },
+    {
         path: "/redirect/*",
         Component: React.lazy(() => import('./pages/Redirect')),
     },

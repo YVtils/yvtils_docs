@@ -13,7 +13,7 @@ const createRedirectUrl = (targetUrl: string): string => {
 const Header = () => {
     return (
         <Navbar
-            brand={<span>YVtils Web</span>}
+            brand={<span>YVtils Docs</span>}
             brandHref="/"
             navItems={[]}
             onMobileMenuToggle={() => { }}

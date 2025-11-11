@@ -15,13 +15,17 @@ const Footer = () => {
             copyrightYear={"2023 - 2025"}
             imprintText="Imprint"
             onImprintClick={() => {
-                window.location.href = '/imprint';
+                window.location.href = 'https://yvtils.net/imprint';
             }}
             onPrivacyClick={() => {
-                window.location.href = '/privacy';
+                window.location.href = 'https://yvtils.net/privacy';
             }}
             privacyText="Privacy Policy"
             variant="default"
+            additionalLinks={[
+                { text: 'License', href: '', onClick: () => { window.location.href = 'https://yvtils.net/license'; } },
+                { text: 'Brand Guidelines', href: '', onClick: () => { window.location.href = 'https://yvtils.net/brand'; } },
+            ]}
         />
     );
 }

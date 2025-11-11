@@ -1,16 +1,21 @@
 import React from 'react';
 
-import { Heading, ThemeProvider, Text } from '@yvtils/designsystem';
+import { ThemeProvider } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Sidebar from './components/Sidebar';
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import ComingSoon from '../components/ComingSoon';
 
 const Content = () => {
     return (
         <div className="content">
-
+            <ComingSoon
+                title="Coming soon"
+                icon="YVtils"
+                primaryCta={{ label: 'Back to Home', href: '/', icon: 'Home' }}
+            />
         </div>
     );
 }

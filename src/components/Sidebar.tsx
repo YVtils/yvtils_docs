@@ -18,8 +18,8 @@ const Sidebar = () => {
                     icon: 'Home',
                     id: '1',
                     isActive: true,
-                    label: 'Dashboard',
-                    onClick: () => { }
+                    label: 'Introduction',
+                    href: '/',
                 },
                 {
                     children: [
@@ -32,17 +32,30 @@ const Sidebar = () => {
                             href: '/projects/archived',
                             id: '2-2',
                             label: 'Archived'
-                        },
-                        {
-                            href: '/projects/templates',
-                            id: '2-3',
-                            label: 'Templates'
                         }
                     ],
                     icon: 'Folder',
                     id: '2',
-                    label: 'YVtils SMP'
-                }
+                    label: 'User Setup'
+                },
+                {
+                    children: [
+                        {
+                            href: '',
+                            id: '3-1',
+                            label: 'Getting Started'
+                        },
+                    ],
+                    icon: 'BookOpen',
+                    id: '3',
+                    label: 'For Devs'
+                },
+                {
+                    icon: 'Question',
+                    id: '4',
+                    label: 'FAQ',
+                    href: '/faq'
+                },
             ]}
             onToggleCollapse={() => setCollapsed(!collapsed)}
             collapsed={collapsed}
