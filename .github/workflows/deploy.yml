@@ -1,0 +1,64 @@
+name: Build and Deploy YVtils Web
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build, Push Docker Image & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Authenticate with GitHub npm registry
+        run: |
+          echo "@yvtils:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Log in to Docker registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} -t ${{ secrets.REGISTRY_IMAGE_NAME }}:latest .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.REGISTRY_IMAGE_NAME }}:latest
+
+      - name: Cleanup server
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_DIR }}
+            docker compose down
+            docker rm -f yvtils_web_*
+
+      - name: SSH and deploy via Docker Compose
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_DIR }}
+            docker login ${{ secrets.REGISTRY_URL }} -u "${{ secrets.REGISTRY_USERNAME }}" -p "${{ secrets.REGISTRY_PASSWORD }}"
+            docker compose pull
+            docker compose up -d
