@@ -14,6 +14,26 @@ const router = createBrowserRouter([
         Component: App,
     },
     {
+        path: "/modules/list",
+        Component: React.lazy(() => import('./pages/Placeholder')),
+    },
+    {
+        path: "/modules/archived",
+        Component: React.lazy(() => import('./pages/Placeholder')),
+    },
+    {
+        path: "/dev/setup",
+        Component: React.lazy(() => import('./pages/Placeholder')),
+    },
+    {
+        path: "/dev/build",
+        Component: React.lazy(() => import('./pages/Placeholder')),
+    },
+    {
+        path: "/dev/fusion/introduction",
+        Component: React.lazy(() => import('./pages/Placeholder')),
+    },
+    {
         path: "/faq",
         Component: React.lazy(() => import('./pages/Placeholder')),
     },
