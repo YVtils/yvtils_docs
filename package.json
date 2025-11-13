@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@types/prismjs": "^1.26.5",
-    "@yvtils/designsystem": "^0.0.19",
+    "@yvtils/designsystem": "^0.0.20",
     "prismjs": "^1.30.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

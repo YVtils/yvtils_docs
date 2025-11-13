@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { Sidebar as SidebarComponent } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
 
+const SIDEBAR_COLLAPSED_KEY = 'sidebar-collapsed';
+
 const Sidebar = () => {
-    const [collapsed, setCollapsed] = useState(false);
+    // Initialize collapsed state from localStorage
+    const [collapsed, setCollapsed] = useState(() => {
+        const saved = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+        return saved ? JSON.parse(saved) : false;
+    });
     const location = useLocation();
+
+    // Save collapsed state to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem(SIDEBAR_COLLAPSED_KEY, JSON.stringify(collapsed));
+    }, [collapsed]);
 
     // Helper function to check if a path matches the current location
     const isPathActive = (href?: string): boolean => {
@@ -37,24 +48,17 @@ const Sidebar = () => {
                 {
                     children: [
                         {
-                            href: '/modules/list',
+                            href: '/user/modules/list',
                             id: '2-1',
                             label: 'Available Modules',
-                            isActive: isPathActive('/modules/list'),
+                            isActive: isPathActive('/user/modules/list'),
                         },
-                        {
-                            href: '/modules/archived',
-                            id: '2-2',
-                            label: '...',
-                            isActive: isPathActive('/modules/archived'),
-                        }
                     ],
                     icon: 'Folder',
                     id: '2',
                     label: 'User Setup',
                     isActive: hasActiveChild([
-                        { href: '/modules/list' },
-                        { href: '/modules/archived' }
+                        { href: '/user/modules/list' },
                     ]),
                 },
                 {
