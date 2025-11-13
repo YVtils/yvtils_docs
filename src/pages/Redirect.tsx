@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 import { Heading, ThemeProvider, Text, Button, Spacer } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
@@ -8,6 +9,7 @@ import Header from '../components/Header';
 const isExternalUrl = (url: string) => /^https?:\/\//i.test(url);
 
 const Content = () => {
+    const { t } = useTranslation('errors');
     const location = useLocation();
 
     // Extract the path after /redirect/
@@ -39,11 +41,11 @@ const Content = () => {
 
     return (
         <div className="content">
-            <Heading size='3xl'>Redirecting...</Heading>
+            <Heading size='3xl'>{t('redirect.title')}</Heading>
             <Spacer size='sm' />
-            <Text size='xl'>Please wait while we redirect you to the new page.</Text>
+            <Text size='xl'>{t('redirect.description')}</Text>
             <Spacer size='sm' />
-            <Text size='xl'>If you are not redirected automatically, click the button below:</Text>
+            <Text size='xl'>{t('redirect.manual')}</Text>
             <Spacer size='md' />
 
             <Button
@@ -53,7 +55,7 @@ const Content = () => {
                 size="lg"
                 variant="primary"
             >
-                Redirect
+                {t('redirect.button')}
             </Button>
         </div>
     );

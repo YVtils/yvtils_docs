@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ThemeProvider } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
 
@@ -11,11 +9,7 @@ import ComingSoon from '../components/ComingSoon';
 const Content = () => {
     return (
         <div className="content">
-            <ComingSoon
-                title="Coming soon"
-                icon="YVtils"
-                primaryCta={{ label: 'Back to Home', href: '/', icon: 'Home' }}
-            />
+            <ComingSoon icon="YVtils" />
         </div>
     );
 }

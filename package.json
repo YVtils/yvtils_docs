@@ -1,5 +1,5 @@
 {
-  "name": "yvtils-web-app",
+  "name": "yvtils-docs-app",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "@types/prismjs": "^1.26.5",
-    "@yvtils/designsystem": "^0.0.20",
+    "@yvtils/designsystem": "^0.0.22",
+    "i18next": "^25.6.2",
+    "i18next-browser-languagedetector": "^8.2.0",
     "prismjs": "^1.30.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-i18next": "^16.3.1",
     "react-router-dom": "^7.9.5"
   },
   "devDependencies": {

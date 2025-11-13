@@ -1,0 +1,13 @@
+{
+    "404": {
+        "title": "404 - Page not found",
+        "description": "Sorry, but the page you were trying to visit does not exist",
+        "button": "Home"
+    },
+    "redirect": {
+        "title": "Redirecting...",
+        "description": "Please wait while we redirect you to the new page.",
+        "manual": "If you are not redirected automatically, click the button below:",
+        "button": "Redirect"
+    }
+}

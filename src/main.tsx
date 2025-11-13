@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
+import './i18n/config'
 
 import {
     createBrowserRouter,
@@ -14,11 +15,11 @@ const router = createBrowserRouter([
         Component: App,
     },
     {
-        path: "/modules/list",
-        Component: React.lazy(() => import('./pages/Placeholder')),
+        path: "/user/modules/list",
+        Component: React.lazy(() => import('./pages/user/modules/list')),
     },
     {
-        path: "/modules/archived",
+        path: "/user/modules/archived",
         Component: React.lazy(() => import('./pages/Placeholder')),
     },
     {

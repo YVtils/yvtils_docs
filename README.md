@@ -1,15 +1,17 @@
-# YVtils Web App
+# YVtils Documentation
 
-A modern React web application built with Vite and TypeScript, part of the YVtils ecosystem.
+The official documentation website for YVtils - a comprehensive resource for users and developers working with YVtils plugins and modules.
 
 ## 🚀 Features
 
-- **React 18** - Modern React with hooks and functional components
+- **Multi-language Support** - Documentation available in multiple languages (English, German) via i18next
+- **Interactive Code Examples** - Syntax-highlighted code snippets with multi-language support using Prism.js
+- **User Documentation** - Guides for installing and using YVtils modules
+- **Developer Documentation** - Setup guides and build instructions for contributors
+- **YVtils Design System** - Consistent UI components matching the YVtils ecosystem
+- **React 19** - Modern React with hooks and functional components
 - **TypeScript** - Type-safe development experience
 - **Vite** - Fast build tool and development server
-- **React Router** - Client-side routing
-- **YVtils Design System** - Consistent UI components
-- **ESLint** - Code linting for consistent code quality
 - **Docker** - Containerized deployment
 - **GitHub Actions** - Automated CI/CD pipeline
 
@@ -25,8 +27,8 @@ A modern React web application built with Vite and TypeScript, part of the YVtil
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd yvtils_web
+git clone https://github.com/YVtils/yvtils_docs.git
+cd yvtils_docs
 
 # Install dependencies
 npm install
@@ -54,15 +56,30 @@ npm run type-check
 ## 🏗️ Project Structure
 
 ```text
-yvtils_web/
+yvtils_docs/
 ├── public/              # Static assets
-│   └── icon.svg
+│   └── robots.txt
 ├── src/                 # Source code
 │   ├── components/      # Reusable React components
-│   │   └── Header.tsx
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── CodeWindow.tsx   # Syntax-highlighted code snippets
 │   ├── pages/          # Page components
+│   │   ├── dev/        # Developer documentation pages
+│   │   │   ├── setup.tsx
+│   │   │   ├── build.tsx
+│   │   │   └── fusion/
+│   │   ├── user/       # User documentation pages
+│   │   │   └── modules/    # Module-specific docs
 │   │   ├── 404.tsx
+│   │   ├── Placeholder.tsx
 │   │   └── Redirect.tsx
+│   ├── i18n/           # Internationalization configuration
+│   │   └── config.ts
+│   ├── locales/        # Translation files
+│   │   ├── en/         # English translations
+│   │   └── de/         # German translations
 │   ├── App.tsx         # Main application component
 │   ├── main.tsx        # Application entry point
 │   └── index.css       # Global styles
@@ -81,17 +98,17 @@ yvtils_web/
 
 ### Building the Docker Image
 
-The project uses a multi-stage Docker build:
+The documentation site uses a multi-stage Docker build:
 
-1. **Build Stage**: Uses Node.js 18 Alpine to build the React application
-2. **Production Stage**: Uses Nginx Alpine to serve the built static files
+1. **Build Stage**: Uses Node.js 18 Alpine to build the documentation website
+2. **Production Stage**: Uses Nginx Alpine to serve the static documentation files
 
 ```bash
 # Build the Docker image
-docker build -t yvtils-web:latest .
+docker build -t yvtils-docs:latest .
 
 # Run the container locally
-docker run -p 8080:80 yvtils-web:latest
+docker run -p 8080:80 yvtils-docs:latest
 ```
 
 ### Docker Compose
@@ -119,7 +136,7 @@ The project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) 
 
    - Sets up Node.js 18
    - Installs dependencies with `npm ci`
-   - Builds the React application with `npm run build`
+   - Builds the documentation with `npm run build`
 
 2. **Docker**:
 
@@ -178,6 +195,16 @@ The `vite.config.ts` file contains:
 5. Commit your changes (`git commit -m 'Add amazing feature'`)
 6. Push to the branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
+
+### Contributing Documentation
+
+When adding or updating documentation:
+
+- Add new pages in the appropriate `src/pages/dev/` or `src/pages/user/` directory
+- Update translations in `src/locales/en/` and `src/locales/de/`
+- Use the `CodeWindow` component for code snippets with syntax highlighting
+- Test that all language switches work correctly
+- Ensure navigation links are updated in the appropriate locale files
 
 ## 📄 License
 

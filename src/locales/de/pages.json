@@ -1,0 +1,23 @@
+{
+    "home": {
+        "title": "Willkommen zur YVtils Dokumentation",
+        "subtitle": "Einführung",
+        "description": "Erfahren Sie, wie Sie YVtils-Plugins verwenden..."
+    },
+    "devSetup": {
+        "title": "Entwicklungsumgebung einrichten",
+        "description": "Erste Schritte mit der YVtils-Entwicklung"
+    },
+    "comingSoon": {
+        "title": "Demnächst verfügbar",
+        "description": "Wir arbeiten an dieser Seite. Bitte schauen Sie später noch einmal vorbei.",
+        "button": "Zurück zur Startseite"
+    },
+    "user": {
+        "modules": {
+            "list": {
+                "title": "Verfügbare Module"
+            }
+        }
+    }
+}

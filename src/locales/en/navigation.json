@@ -1,0 +1,23 @@
+{
+    "sidebar": {
+        "home": {
+            "label": "Introduction"
+        },
+        "userSetup": {
+            "label": "User Setup",
+            "availableModules": "Available Modules"
+        },
+        "forDevs": {
+            "label": "For Devs",
+            "setup": "Setting up your development environment",
+            "build": "Build the plugins yourself",
+            "fusion": {
+                "label": "Fusion Module",
+                "introduction": "Introduction to Fusion Module"
+            }
+        },
+        "faq": {
+            "label": "FAQ"
+        }
+    }
+}

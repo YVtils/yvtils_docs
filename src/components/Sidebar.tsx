@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Sidebar as SidebarComponent } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
@@ -7,6 +8,7 @@ import '@yvtils/designsystem/styles';
 const SIDEBAR_COLLAPSED_KEY = 'sidebar-collapsed';
 
 const Sidebar = () => {
+    const { t } = useTranslation('navigation');
     // Initialize collapsed state from localStorage
     const [collapsed, setCollapsed] = useState(() => {
         const saved = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
@@ -42,7 +44,7 @@ const Sidebar = () => {
                     icon: 'Home',
                     id: '1',
                     isActive: isPathActive('/'),
-                    label: 'Introduction',
+                    label: t('sidebar.home.label'),
                     href: '/',
                 },
                 {
@@ -50,13 +52,13 @@ const Sidebar = () => {
                         {
                             href: '/user/modules/list',
                             id: '2-1',
-                            label: 'Available Modules',
+                            label: t('sidebar.userSetup.availableModules'),
                             isActive: isPathActive('/user/modules/list'),
                         },
                     ],
                     icon: 'Folder',
                     id: '2',
-                    label: 'User Setup',
+                    label: t('sidebar.userSetup.label'),
                     isActive: hasActiveChild([
                         { href: '/user/modules/list' },
                     ]),
@@ -66,13 +68,13 @@ const Sidebar = () => {
                         {
                             href: '/dev/setup',
                             id: '3-1',
-                            label: 'Setting up your development environment',
+                            label: t('sidebar.forDevs.setup'),
                             isActive: isPathActive('/dev/setup'),
                         },
                         {
                             href: '/dev/build',
                             id: '3-2',
-                            label: 'Build the plugins yourself',
+                            label: t('sidebar.forDevs.build'),
                             isActive: isPathActive('/dev/build'),
                         },
                         {
@@ -80,12 +82,12 @@ const Sidebar = () => {
                                 {
                                     href: '/dev/fusion/introduction',
                                     id: '3-3-1',
-                                    label: 'Introduction to Fusion Module',
+                                    label: t('sidebar.forDevs.fusion.introduction'),
                                     isActive: isPathActive('/dev/fusion/introduction'),
                                 }
                             ],
                             id: '3-3',
-                            label: 'Fusion Module',
+                            label: t('sidebar.forDevs.fusion.label'),
                             isActive: hasActiveChild([
                                 { href: '/dev/fusion/introduction' }
                             ]),
@@ -93,7 +95,7 @@ const Sidebar = () => {
                     ],
                     icon: 'BookOpen',
                     id: '3',
-                    label: 'For Devs',
+                    label: t('sidebar.forDevs.label'),
                     isActive: hasActiveChild([
                         { href: '/dev/setup' },
                         { href: '/dev/build' },
@@ -103,13 +105,16 @@ const Sidebar = () => {
                 {
                     icon: 'Question',
                     id: '4',
-                    label: 'FAQ',
+                    label: t('sidebar.faq.label'),
                     href: '/faq',
                     isActive: isPathActive('/faq'),
                 },
             ]}
             onToggleCollapse={() => setCollapsed(!collapsed)}
             collapsed={collapsed}
+            showToggle={false}
+            autoExpandActiveParents
+            variant='floating'
         />
     );
 }

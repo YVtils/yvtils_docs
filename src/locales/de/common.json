@@ -1,0 +1,16 @@
+{
+    "brand": "YVtils Docs",
+    "footer": {
+        "company": "YVtils",
+        "copyright": "2023 - 2025",
+        "imprint": "Impressum",
+        "privacy": "Datenschutzerklärung",
+        "license": "Lizenz",
+        "brandGuidelines": "Markenrichtlinien"
+    },
+    "language": {
+        "select": "Sprache auswählen",
+        "en": "English",
+        "de": "Deutsch"
+    }
+}

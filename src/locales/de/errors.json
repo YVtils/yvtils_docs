@@ -1,0 +1,13 @@
+{
+    "404": {
+        "title": "404 - Seite nicht gefunden",
+        "description": "Entschuldigung, aber die Seite, die Sie besuchen wollten, existiert nicht",
+        "button": "Startseite"
+    },
+    "redirect": {
+        "title": "Weiterleitung...",
+        "description": "Bitte warten Sie, während wir Sie zur neuen Seite weiterleiten.",
+        "manual": "Wenn Sie nicht automatisch weitergeleitet werden, klicken Sie auf die Schaltfläche unten:",
+        "button": "Weiterleiten"
+    }
+}

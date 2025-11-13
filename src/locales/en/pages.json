@@ -1,0 +1,27 @@
+{
+    "home": {
+        "title": "Welcome to YVtils Documentation",
+        "subtitle": "Introduction",
+        "description": "Learn how to use YVtils plugins..."
+    },
+    "modulesList": {
+        "title": "Available Modules",
+        "description": "Browse all available YVtils modules"
+    },
+    "devSetup": {
+        "title": "Development Environment Setup",
+        "description": "Get started with YVtils development"
+    },
+    "comingSoon": {
+        "title": "Coming soon",
+        "description": "We are working on this page. Please check back later.",
+        "button": "Back to Home"
+    },
+    "user": {
+        "modules": {
+            "list": {
+                "title": "Available Modules"
+            }
+        }
+    }
+}

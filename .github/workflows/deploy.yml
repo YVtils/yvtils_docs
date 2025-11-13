@@ -1,8 +1,8 @@
-name: Build and Deploy YVtils Web
+name: Build and Deploy YVtils Docs
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: "npm"
@@ -31,14 +31,25 @@ jobs:
       - name: Build React app
         run: npm run build
 
+      - name: Determine image tag
+        id: meta
+        run: |
+          echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+          echo "tag=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
       - name: Log in to Docker registry
         run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} -t ${{ secrets.REGISTRY_IMAGE_NAME }}:latest .
+        run: |
+          docker build \
+            --build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            -t ${{ secrets.REGISTRY_IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.REGISTRY_IMAGE_NAME }}:latest
+        run: |
+          docker push ${{ secrets.REGISTRY_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       - name: Cleanup server
         uses: appleboy/ssh-action@v1.2.2
@@ -49,7 +60,7 @@ jobs:
           script: |
             cd ${{ secrets.DEPLOY_DIR }}
             docker compose down
-            docker rm -f yvtils_web_*
+            docker rm -f yvtils_docs_*
 
       - name: SSH and deploy via Docker Compose
         uses: appleboy/ssh-action@v1.2.2
@@ -59,6 +70,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.DEPLOY_DIR }}
-            docker login ${{ secrets.REGISTRY_URL }} -u "${{ secrets.REGISTRY_USERNAME }}" -p "${{ secrets.REGISTRY_PASSWORD }}"
-            docker compose pull
-            docker compose up -d
+            # Secure login with password-stdin
+            echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+            # Provide IMAGE_TAG via environment without writing to .env (avoids permission issues)
+            IMAGE_TAG=${{ env.IMAGE_TAG }} docker compose pull
+            IMAGE_TAG=${{ env.IMAGE_TAG }} docker compose up -d

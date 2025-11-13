@@ -1,6 +1,6 @@
 services:
-  web:
-    image: registry.yvtils.net/yvtils-web:latest
+  docs:
+    image: registry.yvtils.net/yvtils-docs:latest
     ports:
-      - "1026:80"
+      - "1028:80"
     restart: always

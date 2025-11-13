@@ -1,30 +1,27 @@
-import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Footer as FooterComponent } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
 
-// Helper function to create encoded redirect URLs
-const createRedirectUrl = (targetUrl: string): string => {
-    return `/redirect/${encodeURIComponent(targetUrl)}`;
-};
-
 const Footer = () => {
+    const { t } = useTranslation('common');
+
     return (
         <FooterComponent
-            companyName="YVtils"
-            copyrightYear={"2023 - 2025"}
-            imprintText="Imprint"
+            companyName={t('footer.company')}
+            copyrightYear={t('footer.copyright')}
+            imprintText={t('footer.imprint')}
             onImprintClick={() => {
                 window.location.href = 'https://yvtils.net/imprint';
             }}
             onPrivacyClick={() => {
                 window.location.href = 'https://yvtils.net/privacy';
             }}
-            privacyText="Privacy Policy"
+            privacyText={t('footer.privacy')}
             variant="default"
             additionalLinks={[
-                { text: 'License', href: '', onClick: () => { window.location.href = 'https://yvtils.net/license'; } },
-                { text: 'Brand Guidelines', href: '', onClick: () => { window.location.href = 'https://yvtils.net/brand'; } },
+                { text: t('footer.license'), href: '', onClick: () => { window.location.href = 'https://yvtils.net/license'; } },
+                { text: t('footer.brandGuidelines'), href: '', onClick: () => { window.location.href = 'https://yvtils.net/brand'; } },
             ]}
         />
     );

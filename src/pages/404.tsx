@@ -1,4 +1,4 @@
-import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Heading, ThemeProvider, Text, Button, Spacer } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
@@ -7,14 +7,16 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Content = () => {
+    const { t } = useTranslation('errors');
+
     return (
         <div className="content">
-            
-            <Heading size='3xl'>404 - Page not found</Heading>
+
+            <Heading size='3xl'>{t('404.title')}</Heading>
             <Spacer
                 size='sm'
             />
-            <Text size='xl'>Sorry, but the page you were trying to visit does not exist</Text>
+            <Text size='xl'>{t('404.description')}</Text>
 
             <Spacer
                 size='md'
@@ -30,7 +32,7 @@ const Content = () => {
                 variant="primary"
 
             >
-                Home
+                {t('404.button')}
             </Button>
         </div>
     );
