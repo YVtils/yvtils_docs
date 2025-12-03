@@ -2,9 +2,7 @@ import React from 'react';
 
 import { Heading, ThemeProvider, Text, Button, Spacer } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
-import Header from '../../../components/Header';
-import Sidebar from '../../../components/Sidebar';
-import Footer from '../../../components/Footer';
+import { Header, Footer, Sidebar } from '@layout';
 import { useTranslation } from 'react-i18next';
 
 const Content = () => {
@@ -15,7 +13,7 @@ const Content = () => {
             <Heading size="xl" level="h1">
                 {t('user.modules.list.title')}
             </Heading>
-            
+
         </div>
     );
 }

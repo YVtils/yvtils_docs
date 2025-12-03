@@ -1,9 +1,7 @@
 import { ThemeProvider } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
 
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { Header, Footer, Sidebar } from '@layout';
 import ComingSoon from '../components/ComingSoon';
 
 const Content = () => {

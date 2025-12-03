@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Heading, ThemeProvider } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Sidebar from './components/Sidebar';
+import { Header, Footer, Sidebar } from '@layout';
 
 const Content = () => {
     const { t } = useTranslation('pages');

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Heading, ThemeProvider, Text, Button, Spacer } from '@yvtils/designsystem';
 import '@yvtils/designsystem/styles';
-import Header from '../components/Header';
+import { Header } from '@layout';
 
 const isExternalUrl = (url: string) => /^https?:\/\//i.test(url);
 
