@@ -1,0 +1,134 @@
+#root {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#root > header,
+#root > footer {
+  flex-shrink: 0;
+}
+
+.docs-layout {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.content-scroll {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.docs-content {
+  flex: 1 1 0;
+  width: min(100%, 56rem);
+  min-width: 0;
+  gap: var(--spacing-xl);
+  padding: clamp(2rem, 5vw, 4rem);
+  margin: 0 auto;
+}
+
+.docs-section {
+  scroll-margin-top: var(--spacing-xl);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.docs-section > p {
+  line-height: var(--line-height-relaxed);
+}
+
+.docs-section > .code-block,
+.docs-notice {
+  width: 100%;
+  min-width: 0;
+}
+
+.docs-notice {
+  align-items: flex-start;
+}
+
+.screenshot-placeholder {
+  width: 100%;
+  min-height: 10rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px dashed var(--border-primary);
+}
+
+.permission-list {
+  width: 100%;
+  min-width: 0;
+}
+
+.docs-list p {
+  line-height: var(--line-height-relaxed);
+}
+
+.permission-row {
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.permission-name {
+  font-family: var(--font-family-mono);
+  overflow-wrap: anywhere;
+}
+
+.page-navigation {
+  width: 100%;
+  margin-top: var(--spacing-xl);
+}
+
+.page-navigation-links {
+  justify-content: space-between;
+}
+
+.page-navigation-next {
+  margin-left: auto;
+}
+
+.version-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.version-selector select {
+  max-width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--spacing-sm);
+  background: var(--bg-primary);
+  color: inherit;
+  font: inherit;
+}
+
+@media (min-width: 768px) {
+  .docs-layout > .sidebar {
+    height: 100%;
+    position: relative;
+  }
+}
+
+@media (max-width: 767px) {
+  .docs-layout {
+    flex-direction: column;
+  }
+
+  .content-scroll {
+    width: 100%;
+  }
+
+  .docs-content {
+    padding: var(--spacing-xl) var(--spacing-lg) 4rem;
+  }
+}
