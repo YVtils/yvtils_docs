@@ -94,24 +94,6 @@
   margin-left: auto;
 }
 
-.version-selector {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  font-size: 0.875rem;
-  color: var(--text-primary);
-}
-
-.version-selector select {
-  max-width: 100%;
-  padding: var(--spacing-sm);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--spacing-sm);
-  background: var(--bg-primary);
-  color: inherit;
-  font: inherit;
-}
-
 @media (min-width: 768px) {
   .docs-layout > .sidebar {
     height: 100%;

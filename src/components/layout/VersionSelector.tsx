@@ -1,28 +1,32 @@
+import { Popover } from '@yvtils/designsystem-v2'
 import { currentDocsVersion, docsVersions, resolveVersionedPath, versionedHref } from './docsVersions'
 
 export function VersionSelector() {
   const location = resolveVersionedPath(window.location.pathname)
 
   return (
-    <label className="version-selector">
-      <span>Docs version</span>
-      <select
-        aria-label="Documentation version"
-        value={location?.version ?? ''}
-        onChange={(event) => {
-          window.location.assign(versionedHref(
-            `${location?.path ?? '/'}${window.location.search}${window.location.hash}`,
-            event.target.value,
-          ))
-        }}
+    <Popover openDirection="bottom-right">
+      <Popover.Trigger
+        aria-label={`Documentation version: ${location?.version ?? 'Unknown version'}`}
+        variant="outline"
+        tone="brand"
       >
-        {!location && <option value="" disabled>Unknown version</option>}
+        {location?.version ?? 'Unknown version'}
+      </Popover.Trigger>
+      <Popover.Content>
         {docsVersions.map((version) => (
-          <option key={version} value={version}>
+          <Popover.Link
+            key={version}
+            href={versionedHref(
+              `${location?.path ?? '/'}${window.location.search}${window.location.hash}`,
+              version,
+            )}
+            aria-current={location?.version === version ? 'true' : undefined}
+          >
             {version}{version === currentDocsVersion ? ' (latest)' : ''}
-          </option>
+          </Popover.Link>
         ))}
-      </select>
-    </label>
+      </Popover.Content>
+    </Popover>
   )
 }
