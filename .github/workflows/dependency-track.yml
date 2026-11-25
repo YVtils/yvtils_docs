@@ -1,0 +1,111 @@
+name: Dependency-Track SBOM Upload
+
+on:
+  workflow_call:
+    inputs:
+      docs_commit:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      docs_commit:
+        description: 'Docs ref to scan'
+        type: string
+        default: main
+      version:
+        description: 'Documentation version at that ref (vYY.MM.NN)'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  sbom-and-upload:
+    name: Generate SBOM and Upload to Dependency-Track
+    runs-on: ubuntu-latest
+
+    env:
+      SBOM_FILE: sbom.json
+      DEPENDENCYTRACK_URL: ${{ secrets.DEPENDENCYTRACK_URL || vars.DEPENDENCYTRACK_URL }}
+      DEPENDENCYTRACK_API_KEY: ${{ secrets.DEPENDENCYTRACK_API_KEY }}
+      DEPENDENCYTRACK_PROJECT_NAME: ${{ vars.DEPENDENCYTRACK_PROJECT_NAME || github.repository }}
+      PROJECT_VERSION: ${{ inputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.docs_commit }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+
+      - name: Validate SBOM release version
+        run: |
+          node --input-type=module -e '
+            import { currentDocsVersion } from "./src/components/layout/docsVersions.ts";
+            if (currentDocsVersion !== process.env.PROJECT_VERSION) {
+              throw new Error("SBOM version must match the scanned documentation source");
+            }
+          '
+
+      - name: Set up Trivy
+        uses: aquasecurity/setup-trivy@v0.3.1
+
+      - name: Generate CycloneDX SBOM
+        run: trivy fs --format cyclonedx --output ${{ env.SBOM_FILE }} .
+
+      - name: Normalize SBOM for Dependency-Track compatibility
+        run: |
+          set -euo pipefail
+
+          detected_spec_version="$(jq -r '.specVersion // empty' "${SBOM_FILE}")"
+          if [[ "$detected_spec_version" == "1.7" ]]; then
+            echo "Converting CycloneDX specVersion from 1.7 to 1.6 for Dependency-Track compatibility"
+            jq '.specVersion = "1.6"' "${SBOM_FILE}" > "${SBOM_FILE}.tmp"
+            mv "${SBOM_FILE}.tmp" "${SBOM_FILE}"
+          fi
+
+      - name: Upload SBOM to Dependency-Track
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${DEPENDENCYTRACK_API_KEY:-}" || -z "${DEPENDENCYTRACK_PROJECT_NAME:-}" || -z "${DEPENDENCYTRACK_URL:-}" ]]; then
+            echo "Missing required variables:"
+            echo "  DEPENDENCYTRACK_URL"
+            echo "  DEPENDENCYTRACK_API_KEY"
+            echo "  DEPENDENCYTRACK_PROJECT_NAME"
+            exit 1
+          fi
+
+          echo "PROJECT_VERSION: ${PROJECT_VERSION}"
+
+          http_code=$(curl -sS -o /tmp/dependency-track-response.json -w "%{http_code}" \
+            -X POST "${DEPENDENCYTRACK_URL%/}/api/v1/bom" \
+            -H "Content-Type: multipart/form-data" \
+            -H "X-Api-Key: ${DEPENDENCYTRACK_API_KEY}" \
+            -F "projectName=${DEPENDENCYTRACK_PROJECT_NAME}" \
+            -F "projectVersion=${PROJECT_VERSION}" \
+            -F "autoCreate=true" \
+            -F "bom=@${SBOM_FILE}")
+
+          if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
+            echo "Dependency-Track upload failed with status ${http_code}"
+            cat /tmp/dependency-track-response.json
+            exit 1
+          fi
+
+          echo "SBOM uploaded successfully for ${DEPENDENCYTRACK_PROJECT_NAME} ${PROJECT_VERSION}"
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: cyclonedx-sbom-${{ inputs.version }}
+          path: ${{ env.SBOM_FILE }}
+          retention-days: 7

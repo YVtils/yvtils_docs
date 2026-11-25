@@ -1,0 +1,30 @@
+name: yvtils-docs
+
+services:
+  web:
+    image: ${DOCS_IMAGE:?Set DOCS_IMAGE to the release image reference}
+    restart: always
+    networks:
+      - traefik_proxy
+    expose:
+      - "80"
+    volumes:
+      - docs-content:/usr/share/nginx/html:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.http.routers.yvtils-docs.rule=Host(`docs.yvtils.net`)"
+      - "traefik.http.routers.yvtils-docs.entrypoints=websecure"
+      - "traefik.http.routers.yvtils-docs.tls=true"
+      - "traefik.http.routers.yvtils-docs.tls.certresolver=le"
+      - "traefik.http.routers.yvtils-docs.service=yvtils-docs"
+      - "traefik.http.services.yvtils-docs.loadbalancer.server.port=80"
+
+networks:
+  traefik_proxy:
+    external: true
+
+volumes:
+  docs-content:
+    external: true
+    name: yvtils-docs-content

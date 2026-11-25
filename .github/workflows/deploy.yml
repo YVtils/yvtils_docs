@@ -1,0 +1,232 @@
+name: Release and deploy YVtils Docs
+
+on:
+  repository_dispatch:
+    types: [collection-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Existing Collection release tag (vYY.MM.NN)'
+        type: string
+        required: true
+      docs_commit:
+        description: 'Full 40-character docs commit SHA already merged into main'
+        type: string
+        required: true
+
+# Serialize releases without cancelling a running deployment.
+concurrency:
+  group: docs-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build:
+    name: Validate release, build and push image
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      commit: ${{ steps.release.outputs.commit }}
+      digest: ${{ steps.build-image.outputs.digest }}
+    steps:
+      - name: Checkout production history
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+
+      - name: Validate dispatch and approved docs commit
+        id: release
+        env:
+          RELEASE_VERSION: ${{ inputs.version || github.event.client_payload.version }}
+          DOCS_COMMIT: ${{ inputs.docs_commit || github.event.client_payload.docs_commit }}
+        run: node scripts/validate-release.mjs
+
+      - name: Verify matching Collection tag exists
+        uses: actions/github-script@v8
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        with:
+          script: |
+            await github.rest.git.getRef({
+              owner: 'YVtils',
+              repo: 'yvtils_collection',
+              ref: `tags/${process.env.RELEASE_VERSION}`,
+            });
+
+      - name: Checkout validated release source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.release.outputs.commit }}
+          persist-credentials: false
+
+      - name: Require docs version to match Collection
+        env:
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          node --input-type=module -e '
+            import { currentDocsVersion } from "./src/components/layout/docsVersions.ts";
+            if (currentDocsVersion !== process.env.RELEASE_VERSION) {
+              throw new Error(`Docs version ${currentDocsVersion} does not match ${process.env.RELEASE_VERSION}`);
+            }
+          '
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.18.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@yvtils'
+      - run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || github.token }}
+      - run: pnpm test
+      - run: pnpm lint
+      - run: pnpm build
+
+      - name: Set image reference
+        env:
+          IMAGE_NAME: ${{ secrets.REGISTRY_IMAGE_NAME }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+          DOCS_COMMIT: ${{ steps.release.outputs.commit }}
+        run: |
+          set -euo pipefail
+          : "${IMAGE_NAME:?REGISTRY_IMAGE_NAME is required}"
+          echo "IMAGE_REF=${IMAGE_NAME}:${RELEASE_VERSION}-${DOCS_COMMIT}" >> "$GITHUB_ENV"
+
+      - name: Log in to Docker registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - uses: docker/setup-buildx-action@v4
+      - name: Build and push release image
+        id: build-image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_REF }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          secrets: |
+            github_token=${{ secrets.PACKAGES_READ_TOKEN || github.token }}
+
+  deploy:
+    name: Tag docs and deploy persistent snapshots
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.build.outputs.commit }}
+          persist-credentials: false
+
+      - name: Validate deployment settings
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST_FINGERPRINT: ${{ secrets.SSH_HOST_FINGERPRINT }}
+          DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
+        run: |
+          set -euo pipefail
+          : "${SSH_HOST:?SSH_HOST is required}"
+          : "${SSH_USER:?SSH_USER is required}"
+          : "${SSH_PRIVATE_KEY:?SSH_PRIVATE_KEY is required}"
+          : "${SSH_HOST_FINGERPRINT:?SSH_HOST_FINGERPRINT is required}"
+          case "$DEPLOY_DIR" in
+            /*) ;;
+            *) echo "DEPLOY_DIR must be a dedicated absolute path" >&2; exit 1 ;;
+          esac
+          if [[ "$DEPLOY_DIR" == "/" ]]; then
+            echo "DEPLOY_DIR cannot be the filesystem root" >&2
+            exit 1
+          fi
+
+      - name: Create matching docs tag without moving existing tags
+        uses: actions/github-script@v8
+        env:
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+          DOCS_COMMIT: ${{ needs.build.outputs.commit }}
+        with:
+          script: |
+            const ref = `tags/${process.env.RELEASE_VERSION}`;
+            let existing;
+            try {
+              existing = (await github.rest.git.getRef({ ...context.repo, ref })).data;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+            if (existing) {
+              let object = existing.object;
+              while (object.type === 'tag') {
+                object = (await github.rest.git.getTag({
+                  ...context.repo, tag_sha: object.sha,
+                })).data.object;
+              }
+              if (object.type !== 'commit' || object.sha !== process.env.DOCS_COMMIT) {
+                throw new Error(`Refusing to move existing tag ${ref}`);
+              }
+            } else {
+              await github.rest.git.createRef({
+                ...context.repo, ref: `refs/${ref}`, sha: process.env.DOCS_COMMIT,
+              });
+            }
+
+      - name: Prepare Compose configuration
+        run: echo "COMPOSE_CONFIG=$(base64 -w0 deployment/compose.yml)" >> "$GITHUB_ENV"
+
+      - name: Publish snapshot and deploy via Docker Compose
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          DOCS_IMAGE: ${{ secrets.REGISTRY_IMAGE_NAME }}@${{ needs.build.outputs.digest }}
+          DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
+          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.SSH_HOST_FINGERPRINT }}
+          envs: DOCS_IMAGE,DEPLOY_DIR,REGISTRY_URL,REGISTRY_USERNAME,REGISTRY_PASSWORD,COMPOSE_CONFIG
+          script: |
+            set -eu
+            : "${DEPLOY_DIR:?DEPLOY_DIR is required}"
+            : "${DOCS_IMAGE:?DOCS_IMAGE is required}"
+            mkdir -p "$DEPLOY_DIR"
+            cd "$DEPLOY_DIR"
+            printf '%s' "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" -u "$REGISTRY_USERNAME" --password-stdin
+            docker pull "$DOCS_IMAGE"
+            docker volume create yvtils-docs-content
+            docker run --rm \
+              --mount type=volume,source=yvtils-docs-content,target=/site \
+              --entrypoint /bin/sh "$DOCS_IMAGE" /usr/local/bin/publish-docs
+            printf '%s' "$COMPOSE_CONFIG" | base64 -d > compose.yml
+            printf 'DOCS_IMAGE=%s\n' "$DOCS_IMAGE" > .env
+            docker compose -f compose.yml up -d --wait --wait-timeout 60 --remove-orphans
+
+  dependency-track:
+    name: Upload released documentation SBOM
+    needs: [build, deploy]
+    uses: ./.github/workflows/dependency-track.yml
+    with:
+      docs_commit: ${{ needs.build.outputs.commit }}
+      version: ${{ needs.build.outputs.version }}
+    secrets: inherit

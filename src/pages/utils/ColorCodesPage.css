@@ -1,0 +1,38 @@
+.color-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--spacing-md);
+}
+
+.color-card {
+  gap: var(--spacing-sm);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.color-swatch {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.preview-card {
+  width: 100%;
+}
+
+.preview-output {
+  display: block;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  background: #202020;
+  color: #fff;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.preview-output .preview-text {
+  font-family: var(--font-family-mono);
+  color: inherit;
+}

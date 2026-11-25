@@ -1,0 +1,78 @@
+.page {
+  width: min(100% - 3rem, 72rem);
+  margin: 0 auto;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 72rem;
+  padding: 0 var(--spacing-lg);
+}
+
+.hero {
+  gap: var(--spacing-lg);
+  padding: clamp(3rem, 6vw, 5rem) 0;
+  max-width: 52rem;
+}
+
+.hero-heading {
+  max-width: 48rem;
+}
+
+.hero-heading > span[class],
+.hero-heading-accent {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.hero-description {
+  max-width: 38rem;
+  line-height: var(--line-height-relaxed);
+}
+
+.hero-links {
+  margin-top: var(--spacing-sm);
+}
+
+.section {
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xxl) 0 5rem;
+  border-top: 1px solid var(--border-primary);
+}
+
+.section-heading {
+  max-width: 42rem;
+}
+
+.eyebrow {
+  letter-spacing: 0.1em;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--spacing-lg);
+}
+
+.feature-card {
+  min-height: 15rem;
+  padding: var(--spacing-xl);
+}
+
+.feature-card > svg {
+  color: var(--text-brand);
+}
+
+.feature-card a:first-of-type {
+  margin-top: auto;
+}
+
+.getting-started {
+  padding-bottom: 6rem;
+}
+
+.install-card,
+.collection-card {
+  max-width: 42rem;
+  padding: var(--spacing-xl);
+  align-items: flex-start;
+}
