@@ -34,7 +34,7 @@ jobs:
       digest: ${{ steps.build-image.outputs.digest }}
     steps:
       - name: Checkout production history
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0
@@ -63,7 +63,7 @@ jobs:
             });
 
       - name: Checkout validated release source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ steps.release.outputs.commit }}
           persist-credentials: false
@@ -132,7 +132,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ needs.build.outputs.commit }}
           persist-credentials: false
