@@ -4,15 +4,6 @@ on:
   repository_dispatch:
     types: [collection-release]
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Existing Collection release tag (vYY.MM.NN)'
-        type: string
-        required: true
-      docs_commit:
-        description: 'Full 40-character docs commit SHA already merged into main'
-        type: string
-        required: true
 
 # Serialize releases without cancelling a running deployment.
 concurrency:
@@ -25,7 +16,7 @@ permissions:
 
 jobs:
   build:
-    name: Validate release, build and push image
+    name: Resolve release source, build and push image
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
@@ -36,21 +27,35 @@ jobs:
       - name: Checkout production history
         uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ github.sha }}
           fetch-depth: 0
 
       - uses: actions/setup-node@v6
         with:
           node-version: '26'
 
-      - name: Validate dispatch and approved docs commit
+      - name: Resolve release version and commit
         id: release
         env:
-          RELEASE_VERSION: ${{ inputs.version || github.event.client_payload.version }}
-          DOCS_COMMIT: ${{ inputs.docs_commit || github.event.client_payload.docs_commit }}
-        run: node scripts/validate-release.mjs
+          RELEASE_VERSION: ${{ github.event.client_payload.version }}
+          DOCS_COMMIT: ${{ github.event.client_payload.docs_commit }}
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+              node --input-type=module -e '
+                import { appendFileSync } from "node:fs";
+                import { execFileSync } from "node:child_process";
+                import { currentDocsVersion } from "./src/components/layout/docsVersions.ts";
+
+                const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+                appendFileSync(process.env.GITHUB_OUTPUT, `version=${currentDocsVersion}\ncommit=${commit}\n`);
+                console.log(`Manual deployment uses ${currentDocsVersion} at ${commit}`);
+              '
+          else
+            node scripts/validate-release.mjs
+          fi
 
       - name: Verify matching Collection tag exists
+        if: github.event_name == 'repository_dispatch'
         uses: actions/github-script@v8
         env:
           RELEASE_VERSION: ${{ steps.release.outputs.version }}
@@ -62,13 +67,14 @@ jobs:
               ref: `tags/${process.env.RELEASE_VERSION}`,
             });
 
-      - name: Checkout validated release source
+      - name: Checkout release source
         uses: actions/checkout@v7
         with:
           ref: ${{ steps.release.outputs.commit }}
           persist-credentials: false
 
       - name: Require docs version to match Collection
+        if: github.event_name == 'repository_dispatch'
         env:
           RELEASE_VERSION: ${{ steps.release.outputs.version }}
         run: |
@@ -125,7 +131,7 @@ jobs:
             github_token=${{ secrets.PACKAGES_READ_TOKEN || github.token }}
 
   deploy:
-    name: Tag docs and deploy persistent snapshots
+    name: Tag release and deploy persistent snapshots
     needs: build
     runs-on: ubuntu-latest
     environment: production
@@ -160,6 +166,7 @@ jobs:
           fi
 
       - name: Create matching docs tag without moving existing tags
+        if: github.event_name == 'repository_dispatch'
         uses: actions/github-script@v8
         env:
           RELEASE_VERSION: ${{ needs.build.outputs.version }}
@@ -221,12 +228,3 @@ jobs:
             printf '%s' "$COMPOSE_CONFIG" | base64 -d > compose.yml
             printf 'DOCS_IMAGE=%s\n' "$DOCS_IMAGE" > .env
             docker compose -f compose.yml up -d --wait --wait-timeout 60 --remove-orphans
-
-  dependency-track:
-    name: Upload released documentation SBOM
-    needs: [build, deploy]
-    uses: ./.github/workflows/dependency-track.yml
-    with:
-      docs_commit: ${{ needs.build.outputs.commit }}
-      version: ${{ needs.build.outputs.version }}
-    secrets: inherit

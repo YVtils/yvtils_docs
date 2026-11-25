@@ -99,7 +99,11 @@ the versions known when it was released.
 `validate.yml` installs with a frozen lockfile and runs tests, lint, type-checking
 and the production build on pull requests and pushes to `main`.
 `deploy.yml` runs only from `main`, either on a `collection-release`
-repository dispatch or manually with the same two inputs:
+repository dispatch or manually from the selected `main` ref. Manual runs need
+no inputs: they use the docs version in `docsVersions.ts` and the selected ref's
+commit, skipping Collection release/tag validation and docs-tag creation. The
+deployed snapshot remains immutable; a manual run cannot overwrite an existing
+version with different content. Repository dispatches still require this payload:
 
 ```json
 {
@@ -178,11 +182,9 @@ version backward. Nginx serves each release's own SPA entry point and returns
 404 for absent releases or static assets. Compose waits for a successful
 HTTP health check; deployment is not claimed to be zero-downtime.
 
-After deployment, the reusable `dependency-track.yml` scans the exact released
-docs commit and uploads a CycloneDX SBOM under the same release version. Set
-`dependency_project_id` as a repository secret or variable to the UUID of the
-existing Dependency-Track project. Uploads use `project` and `projectVersion`
-to associate each release with that project; the API key needs BOM upload
-permission. The workflow no longer uses a project name or creates projects
-automatically.
-The SBOM workflow can also be rerun manually with a docs ref and matching version.
+The `dependency-track.yml` workflow runs on every push or merge to `main` and
+uploads a CycloneDX SBOM without a project-version field. Set
+`DEPENDENCYTRACK_PROJECT_ID` as a repository secret or variable to the UUID of
+the existing Dependency-Track project. Uploads use `project` to associate each
+SBOM with that project. The API key needs BOM upload permission. The workflow
+does not use a project name or create projects automatically.

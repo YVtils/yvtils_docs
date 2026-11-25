@@ -1,24 +1,8 @@
 name: Dependency-Track SBOM Upload
 
 on:
-  workflow_call:
-    inputs:
-      docs_commit:
-        type: string
-        required: true
-      version:
-        type: string
-        required: true
-  workflow_dispatch:
-    inputs:
-      docs_commit:
-        description: 'Docs ref to scan'
-        type: string
-        default: main
-      version:
-        description: 'Documentation version at that ref (vYY.MM.NN)'
-        type: string
-        required: true
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -32,28 +16,13 @@ jobs:
       SBOM_FILE: sbom.json
       DEPENDENCYTRACK_URL: ${{ secrets.DEPENDENCYTRACK_URL || vars.DEPENDENCYTRACK_URL }}
       DEPENDENCYTRACK_API_KEY: ${{ secrets.DEPENDENCYTRACK_API_KEY }}
-      DEPENDENCY_PROJECT_ID: ${{ secrets.dependency_project_id || vars.dependency_project_id }}
-      PROJECT_VERSION: ${{ inputs.version }}
+      DEPENDENCYTRACK_PROJECT_ID: ${{ secrets.DEPENDENCYTRACK_PROJECT_ID || vars.DEPENDENCYTRACK_PROJECT_ID }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
-          ref: ${{ inputs.docs_commit }}
           persist-credentials: false
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '26'
-
-      - name: Validate SBOM release version
-        run: |
-          node --input-type=module -e '
-            import { currentDocsVersion } from "./src/components/layout/docsVersions.ts";
-            if (currentDocsVersion !== process.env.PROJECT_VERSION) {
-              throw new Error("SBOM version must match the scanned documentation source");
-            }
-          '
 
       - name: Set up Trivy
         uses: aquasecurity/setup-trivy@v0.3.1
@@ -76,22 +45,19 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ -z "${DEPENDENCYTRACK_API_KEY:-}" || -z "${DEPENDENCY_PROJECT_ID:-}" || -z "${DEPENDENCYTRACK_URL:-}" ]]; then
+          if [[ -z "${DEPENDENCYTRACK_API_KEY:-}" || -z "${DEPENDENCYTRACK_PROJECT_ID:-}" || -z "${DEPENDENCYTRACK_URL:-}" ]]; then
             echo "Missing required variables:"
             echo "  DEPENDENCYTRACK_URL"
             echo "  DEPENDENCYTRACK_API_KEY"
-            echo "  dependency_project_id"
+            echo "  DEPENDENCYTRACK_PROJECT_ID"
             exit 1
           fi
-
-          echo "PROJECT_VERSION: ${PROJECT_VERSION}"
 
           http_code=$(curl -sS -o /tmp/dependency-track-response.json -w "%{http_code}" \
             -X POST "${DEPENDENCYTRACK_URL%/}/api/v1/bom" \
             -H "Content-Type: multipart/form-data" \
             -H "X-Api-Key: ${DEPENDENCYTRACK_API_KEY}" \
-            -F "project=${DEPENDENCY_PROJECT_ID}" \
-            -F "projectVersion=${PROJECT_VERSION}" \
+            -F "project=${DEPENDENCYTRACK_PROJECT_ID}" \
             -F "bom=@${SBOM_FILE}")
 
           if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
@@ -100,11 +66,11 @@ jobs:
             exit 1
           fi
 
-          echo "SBOM uploaded successfully for project ID ${DEPENDENCY_PROJECT_ID} ${PROJECT_VERSION}"
+          echo "SBOM uploaded successfully for project ID ${DEPENDENCYTRACK_PROJECT_ID}"
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v7
         with:
-          name: cyclonedx-sbom-${{ inputs.version }}
+          name: cyclonedx-sbom
           path: ${{ env.SBOM_FILE }}
           retention-days: 7
