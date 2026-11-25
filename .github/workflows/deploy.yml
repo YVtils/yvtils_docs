@@ -148,14 +148,12 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST_FINGERPRINT: ${{ secrets.SSH_HOST_FINGERPRINT }}
           DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
         run: |
           set -euo pipefail
           : "${SSH_HOST:?SSH_HOST is required}"
           : "${SSH_USER:?SSH_USER is required}"
           : "${SSH_PRIVATE_KEY:?SSH_PRIVATE_KEY is required}"
-          : "${SSH_HOST_FINGERPRINT:?SSH_HOST_FINGERPRINT is required}"
           case "$DEPLOY_DIR" in
             /*) ;;
             *) echo "DEPLOY_DIR must be a dedicated absolute path" >&2; exit 1 ;;
@@ -211,7 +209,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          fingerprint: ${{ secrets.SSH_HOST_FINGERPRINT }}
           envs: DOCS_IMAGE,DEPLOY_DIR,REGISTRY_URL,REGISTRY_USERNAME,REGISTRY_PASSWORD,COMPOSE_CONFIG
           script: |
             set -eu

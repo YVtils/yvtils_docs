@@ -153,7 +153,6 @@ Configure these **repository secrets**:
 | `REGISTRY_IMAGE_NAME` | Full docs image name, e.g. `registry.yvtils.net/yvtils-docs` |
 | `REGISTRY_USERNAME`, `REGISTRY_PASSWORD` | Registry push/pull credentials |
 | `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY` | Deployment server access |
-| `SSH_HOST_FINGERPRINT` | Trusted SSH server SHA256 host-key fingerprint |
 | `DEPLOY_DIR` | Dedicated absolute Compose directory on the server |
 | `PACKAGES_READ_TOKEN` | Optional GitHub Packages read token when the default token lacks access |
 | `DEPENDENCYTRACK_URL`, `DEPENDENCYTRACK_API_KEY` | Dependency-Track endpoint and BOM upload credentials |
