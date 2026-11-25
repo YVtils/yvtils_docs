@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { currentDocsVersion, docsVersions, resolveVersionedPath, versionedHref } from '../src/components/layout/docsVersions.ts'
-import { colorPages, resolveDocsRoute, statusPages } from '../src/components/layout/docsRoutes.ts'
+import { colorPages, resolveDocsRoute } from '../src/components/layout/docsRoutes.ts'
 import { moduleGuides, pagesForModule } from '../src/pages/collection/modules.ts'
 
 test('documentation versions use unique Collection release tags, newest first', () => {
@@ -15,7 +15,7 @@ test('documentation versions use unique Collection release tags, newest first', 
 })
 
 test('versioned routes and legacy aliases resolve to the same pages', () => {
-  const pages = [...statusPages, ...colorPages, ...moduleGuides.flatMap(pagesForModule)]
+  const pages = [...colorPages, ...moduleGuides.flatMap(pagesForModule)]
   for (const page of pages) {
     const href = versionedHref(page.href)
     assert.equal(href, `/${currentDocsVersion}${page.href}`)

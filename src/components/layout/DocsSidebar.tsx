@@ -1,18 +1,12 @@
 import { Sidebar, Text } from '@yvtils/designsystem-v2'
 import type { SidebarItem } from '@yvtils/designsystem-v2'
-import { colorPages, statusPages } from './docsRoutes'
+import { colorPages } from './docsRoutes'
 import { moduleGuides, pagesForModule } from '../../pages/collection/modules'
 import { versionedHref } from './docsVersions'
 
 export function DocsSidebar({ activeItemId }: { activeItemId?: string }) {
   const navigation: SidebarItem[] = [
     { id: 'introduction', label: 'Introduction', icon: 'BookOpen', href: versionedHref('/') },
-    {
-      id: 'status',
-      label: 'Status Module',
-      icon: 'Layers',
-      children: statusPages.map((page) => ({ ...page, href: versionedHref(page.href), id: `status-${page.id}` })),
-    },
     ...moduleGuides.map((module): SidebarItem => ({
       id: `module-${module.slug}`,
       label: `${module.name} Module`,

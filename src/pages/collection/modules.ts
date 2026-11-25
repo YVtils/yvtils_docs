@@ -6,6 +6,8 @@ type ModuleSection = {
   id: ModuleSectionId
   paragraphs: readonly string[]
   code?: string
+  codeTitle?: string
+  codeLanguage?: 'text' | 'yaml'
   image?: string
   permissions?: readonly PermissionEntry[]
   settings?: readonly { name: string; description: string }[]
@@ -15,11 +17,36 @@ export type ModuleGuide = {
   slug: string
   name: string
   source: string
+  searchTerms?: readonly string[]
   sections: readonly ModuleSection[]
 }
 
 // TODO: Replace the image placeholders with current recode-branch screenshots.
 export const moduleGuides: readonly ModuleGuide[] = [
+  {
+    slug: 'status', name: 'Status', source: 'status',
+    sections: [
+      { id: 'overview', paragraphs: ['Give players a status prefix in chat, the player list, and scoreboard teams. Statuses are saved per player and restored when they reconnect.', 'Enable the status module and find its files under plugins/yvtils/status/.'], image: 'Status management GUI' },
+      { id: 'commands', paragraphs: ['Use /status to open your management GUI. /prefix and /role are aliases with the same permissions.', 'Set custom text, select a configured default, or clear a status. Managing or clearing another player’s status requires additional permissions.'], code: '/status\n/status <player>\n/status set <status>\n/status default <status>\n/status clear [player]' },
+      { id: 'configuration', paragraphs: ['The following values are the recode branch defaults for plugins/yvtils/status/config.yml.', 'The file also includes a documentation URL. Formatting uses MiniMessage tags.'], code: 'display: "<dark_gray>[<white><status><dark_gray>] |<white> <playerName>"\nmaxLength: 20\ndefaultStatus:\n  - "<green>Online"\n  - "<yellow>Away"\n  - "<red>Busy"\nblacklist: []', codeTitle: 'status/config.yml', codeLanguage: 'yaml', settings: [
+        { name: 'display', description: 'Format using the <status> and <playerName> placeholders.' },
+        { name: 'maxLength', description: 'Maximum custom status length after formatting is stripped.' },
+        { name: 'defaultStatus', description: 'Statuses available through /status default.' },
+        { name: 'blacklist', description: 'Exact status strings that cannot be used.' },
+      ] },
+      { id: 'permissions', paragraphs: ['GUI actions also require their corresponding action permission. Clearing another player’s status through the GUI also requires clear.others.'], permissions: [
+        { name: 'yvtils.status.command', defaultAccess: 'Everyone', description: 'Use the status command.' },
+        { name: 'yvtils.status.command.manage.self', defaultAccess: 'Everyone', description: 'Open your status management GUI.' },
+        { name: 'yvtils.status.command.set', defaultAccess: 'Everyone', description: 'Set custom status text.' },
+        { name: 'yvtils.status.command.default', defaultAccess: 'Everyone', description: 'Select a default status.' },
+        { name: 'yvtils.status.command.clear', defaultAccess: 'Everyone', description: 'Clear your own status.' },
+        { name: 'yvtils.status.command.manage.others', defaultAccess: 'Operators', description: 'Open another player’s status GUI.' },
+        { name: 'yvtils.status.command.clear.others', defaultAccess: 'Operators', description: 'Clear another player’s status.' },
+        { name: 'yvtils.status.config', defaultAccess: 'Operators', description: 'Edit module configuration.' },
+        { name: 'yvtils.status.*', defaultAccess: 'Operators', description: 'Access all Status permissions.' },
+      ] },
+    ],
+  },
   {
     slug: 'vanish', name: 'Vanish', source: 'vanish',
     sections: [
@@ -79,8 +106,9 @@ export const moduleGuides: readonly ModuleGuide[] = [
   },
   {
     slug: 'multimine', name: 'MultiMine', source: 'multiMine',
+    searchTerms: ['timber', 'vein miner'],
     sections: [
-      { id: 'overview', paragraphs: ['Mine connected blocks and fell trees with configurable block and tool restrictions, break limits and cooldowns. Sneaking opts out.', 'Normal activation requires Survival mode and permission. Each player can control their own toggle.'], image: 'MultiMine settings menu' },
+      { id: 'overview', paragraphs: ['Mine connected blocks like a vein miner and fell trees with timber-style functionality, using configurable block and tool restrictions, break limits and cooldowns. Sneaking opts out.', 'Normal activation requires Survival mode and permission. Each player can control their own toggle.'], image: 'MultiMine settings menu' },
       { id: 'commands', paragraphs: ['/mm is an alias for /multiMine. Management actions include adding and removing blocks; settings opens the server-wide settings menu.'], code: '/mm toggle [player]\n/mm settings\n/mm add <block>\n/mm remove <block>\n/mm addMultiple\n/mm removeMultiple' },
       { id: 'configuration', paragraphs: ['Enable the case-sensitive multiMine module. Its settings are stored in plugins/yvtils/multiMine/config.yml.', 'The enabled setting defaults to true. Changing it in /mm settings applies immediately and saves when the menu closes; disabling it preserves personal toggles.'] },
       { id: 'permissions', paragraphs: ['MultiMine separates feature access, personal toggles and administration.'], permissions: [

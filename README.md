@@ -74,6 +74,11 @@ releases do not overwrite archived assets. Deploy the contents of `dist`.
 The host must serve each version's own `index.html` for its nested routes and
 the root `index.html` for unversioned routes.
 
+Search metadata is generated for direct route loads as well as client-side
+navigation. The landing page and each Collection module overview are indexable;
+module detail pages and color-code guide pages use `noindex,follow`. The
+generated sitemap lists only the versioned landing page and module overviews.
+
 For a future Collection release:
 
 1. Update the guides alongside the plugin changes. Add the exact plugin tag

@@ -1,9 +1,4 @@
-export const statusPages = [
-  { id: 'overview', label: 'Overview', href: '/docs/collection/status' },
-  { id: 'commands', label: 'Commands', href: '/docs/collection/status/commands' },
-  { id: 'configuration', label: 'Configuration', href: '/docs/collection/status/configuration' },
-  { id: 'permissions', label: 'Permissions', href: '/docs/collection/status/permissions' },
-] as const
+import { moduleGuides, pagesForModule } from '../../pages/collection/modules.ts'
 
 export const colorPages = [
   { id: 'overview', label: 'Overview', href: '/docs/utils/color-codes' },
@@ -13,21 +8,20 @@ export const colorPages = [
   { id: 'preview', label: 'Preview', href: '/docs/utils/color-codes/preview' },
 ] as const
 
-export type StatusPageId = typeof statusPages[number]['id']
 export type ColorPageId = typeof colorPages[number]['id']
 
 export function resolveDocsRoute(path: string, hash: string) {
   const section = hash.slice(1)
-  if (path === '/status/config.yml') {
-    const page = statusPages.find((item) => item.id === section)
-    return { kind: 'status' as const, page: page ?? statusPages[2] }
+  const statusModule = moduleGuides.find((module) => module.slug === 'status')
+  if (path === '/status/config.yml' && statusModule) {
+    const pages = pagesForModule(statusModule)
+    const page = pages.find((item) => item.id === section) ?? pages.find((item) => item.id === 'configuration')
+    if (page) return { kind: 'module' as const, module: statusModule, page }
   }
-  if (path === statusPages[0].href && section) {
-    const page = statusPages.find((item) => item.id === section)
-    if (page) return { kind: 'status' as const, page }
+  if (statusModule && path === pagesForModule(statusModule)[0].href && section) {
+    const page = pagesForModule(statusModule).find((item) => item.id === section)
+    if (page) return { kind: 'module' as const, module: statusModule, page }
   }
-  const status = statusPages.find((item) => item.href === path)
-  if (status) return { kind: 'status' as const, page: status }
   const color = colorPages.find((item) => item.href === path)
   if (color) return { kind: 'color' as const, page: color }
   for (const module of moduleGuides) {
@@ -36,4 +30,3 @@ export function resolveDocsRoute(path: string, hash: string) {
   }
   return undefined
 }
-import { moduleGuides, pagesForModule } from '../../pages/collection/modules.ts'

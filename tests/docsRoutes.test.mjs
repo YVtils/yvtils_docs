@@ -1,18 +1,21 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { colorPages, resolveDocsRoute, statusPages } from '../src/components/layout/docsRoutes.ts'
+import { colorPages, resolveDocsRoute } from '../src/components/layout/docsRoutes.ts'
 import { moduleGuides, pagesForModule } from '../src/pages/collection/modules.ts'
 
 test('every documentation page resolves to its own route', () => {
-  for (const [kind, pages] of [['status', statusPages], ['color', colorPages]]) {
-    for (const page of pages) {
-      assert.deepEqual(resolveDocsRoute(page.href, ''), { kind, page })
+  for (const page of colorPages) {
+    assert.deepEqual(resolveDocsRoute(page.href, ''), { kind: 'color', page })
+  }
+  for (const module of moduleGuides) {
+    for (const page of pagesForModule(module)) {
+      assert.deepEqual(resolveDocsRoute(page.href, ''), { kind: 'module', module, page })
     }
   }
 })
 
 test('all module sections have unique routes and resolve with their guide', () => {
-  const paths = new Set([...statusPages, ...colorPages].map((page) => page.href))
+  const paths = new Set(colorPages.map((page) => page.href))
   const ids = new Set()
   for (const module of moduleGuides) {
     assert.ok(!ids.has(module.slug))
@@ -43,12 +46,15 @@ test('all module sections have unique routes and resolve with their guide', () =
   }
 })
 
-test('old Status section links and configuration URL still resolve', () => {
-  for (const page of statusPages) {
-    assert.deepEqual(resolveDocsRoute('/docs/collection/status', `#${page.id}`), { kind: 'status', page })
-    assert.deepEqual(resolveDocsRoute('/status/config.yml', `#${page.id}`), { kind: 'status', page })
+test('Status section links and legacy configuration URL resolve through its module guide', () => {
+  const statusModule = moduleGuides.find((module) => module.slug === 'status')
+  assert.ok(statusModule)
+  const pages = pagesForModule(statusModule)
+  for (const page of pages) {
+    assert.deepEqual(resolveDocsRoute('/docs/collection/status', `#${page.id}`), { kind: 'module', module: statusModule, page })
+    assert.deepEqual(resolveDocsRoute('/status/config.yml', `#${page.id}`), { kind: 'module', module: statusModule, page })
   }
-  assert.deepEqual(resolveDocsRoute('/status/config.yml', ''), { kind: 'status', page: statusPages[2] })
+  assert.deepEqual(resolveDocsRoute('/status/config.yml', ''), { kind: 'module', module: statusModule, page: pages[2] })
 })
 
 test('unknown paths do not resolve to a documentation page', () => {
