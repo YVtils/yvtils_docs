@@ -32,7 +32,7 @@ jobs:
       SBOM_FILE: sbom.json
       DEPENDENCYTRACK_URL: ${{ secrets.DEPENDENCYTRACK_URL || vars.DEPENDENCYTRACK_URL }}
       DEPENDENCYTRACK_API_KEY: ${{ secrets.DEPENDENCYTRACK_API_KEY }}
-      DEPENDENCYTRACK_PROJECT_NAME: ${{ vars.DEPENDENCYTRACK_PROJECT_NAME || github.repository }}
+      DEPENDENCY_PROJECT_ID: ${{ secrets.dependency_project_id || vars.dependency_project_id }}
       PROJECT_VERSION: ${{ inputs.version }}
 
     steps:
@@ -76,11 +76,11 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ -z "${DEPENDENCYTRACK_API_KEY:-}" || -z "${DEPENDENCYTRACK_PROJECT_NAME:-}" || -z "${DEPENDENCYTRACK_URL:-}" ]]; then
+          if [[ -z "${DEPENDENCYTRACK_API_KEY:-}" || -z "${DEPENDENCY_PROJECT_ID:-}" || -z "${DEPENDENCYTRACK_URL:-}" ]]; then
             echo "Missing required variables:"
             echo "  DEPENDENCYTRACK_URL"
             echo "  DEPENDENCYTRACK_API_KEY"
-            echo "  DEPENDENCYTRACK_PROJECT_NAME"
+            echo "  dependency_project_id"
             exit 1
           fi
 
@@ -90,9 +90,8 @@ jobs:
             -X POST "${DEPENDENCYTRACK_URL%/}/api/v1/bom" \
             -H "Content-Type: multipart/form-data" \
             -H "X-Api-Key: ${DEPENDENCYTRACK_API_KEY}" \
-            -F "projectName=${DEPENDENCYTRACK_PROJECT_NAME}" \
+            -F "project=${DEPENDENCY_PROJECT_ID}" \
             -F "projectVersion=${PROJECT_VERSION}" \
-            -F "autoCreate=true" \
             -F "bom=@${SBOM_FILE}")
 
           if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
@@ -101,7 +100,7 @@ jobs:
             exit 1
           fi
 
-          echo "SBOM uploaded successfully for ${DEPENDENCYTRACK_PROJECT_NAME} ${PROJECT_VERSION}"
+          echo "SBOM uploaded successfully for project ID ${DEPENDENCY_PROJECT_ID} ${PROJECT_VERSION}"
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v7

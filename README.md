@@ -180,10 +180,9 @@ HTTP health check; deployment is not claimed to be zero-downtime.
 
 After deployment, the reusable `dependency-track.yml` scans the exact released
 docs commit and uploads a CycloneDX SBOM under the same release version. Set
-`DEPENDENCYTRACK_PROJECT_NAME` as a repository variable to your desired project
-name (default: `YVtils/yvtils_docs`). Uploads use `projectName`, `projectVersion`
-and `autoCreate=true` so each release is a separate project version; the API
-key needs BOM upload and project-creation permissions. The old
-`DEPENDENCYTRACK_PROJECT_ID` setting is no longer used because a fixed UUID
-would upload every release into the same project version.
+`dependency_project_id` as a repository secret or variable to the UUID of the
+existing Dependency-Track project. Uploads use `project` and `projectVersion`
+to associate each release with that project; the API key needs BOM upload
+permission. The workflow no longer uses a project name or creates projects
+automatically.
 The SBOM workflow can also be rerun manually with a docs ref and matching version.
