@@ -10,7 +10,7 @@ RUN --mount=type=secret,id=github_token,required=true \
 COPY . .
 RUN pnpm build
 
-FROM nginx:1.28-alpine
+FROM nginx:1.31-alpine
 COPY deployment/nginx.conf /etc/nginx/conf.d/default.conf
 COPY deployment/publish-docs.sh /usr/local/bin/publish-docs
 COPY --from=build /app/dist /opt/docs
