@@ -33,10 +33,20 @@ if [ -f "$site_dir/release-version" ]; then
   latest="$(printf '%s\n%s\n' "$previous" "$version" | LC_ALL=C sort | tail -n 1)"
 fi
 if [ "$latest" = "$version" ]; then
+  for file in sitemap.xml robots.txt; do
+    if [ ! -f "$source_dir/$file" ]; then
+      echo "Missing required file: $source_dir/$file" >&2
+      exit 1
+    fi
+  done
   if [ -d "$source_dir/fonts" ]; then
     mkdir -p "$site_dir/fonts"
     cp -R "$source_dir/fonts/." "$site_dir/fonts/"
   fi
+  for file in sitemap.xml robots.txt; do
+    cp "$source_dir/$file" "$site_dir/.$file.next"
+    mv "$site_dir/.$file.next" "$site_dir/$file"
+  done
   cp "$source_dir/index.html" "$site_dir/.index.html.next"
   mv "$site_dir/.index.html.next" "$site_dir/index.html"
   printf '%s\n' "$version" > "$site_dir/.release-version.next"

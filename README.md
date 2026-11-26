@@ -78,6 +78,8 @@ Search metadata is generated for direct route loads as well as client-side
 navigation. The landing page and each Collection module overview are indexable;
 module detail pages and color-code guide pages use `noindex,follow`. The
 generated sitemap lists only the versioned landing page and module overviews.
+The deployment publishes `sitemap.xml` and `robots.txt` from the current
+release at the site root; delayed older releases do not replace them.
 
 For a future Collection release:
 
