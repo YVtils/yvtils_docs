@@ -3,6 +3,14 @@ set -eu
 
 source_dir="${DOCS_SOURCE_DIR:-/opt/docs}"
 site_dir="${DOCS_SITE_DIR:-/site}"
+allow_overwrite="${DOCS_ALLOW_OVERWRITE:-false}"
+case "$allow_overwrite" in
+  true|false) ;;
+  *)
+    echo "DOCS_ALLOW_OVERWRITE must be true or false" >&2
+    exit 1
+    ;;
+esac
 version="$(cat "$source_dir/release-version")"
 if [ "${#version}" -ne 9 ] || ! printf '%s\n' "$version" | grep -Eq '^v[0-9]{2}\.[0-9]{2}\.[0-9]{2}$'; then
   echo "Invalid documentation release version: $version" >&2
@@ -14,8 +22,34 @@ mkdir -p "$site_dir"
 
 if [ -e "$site_dir/$version" ]; then
   if ! diff -qr "$source_dir/$version" "$site_dir/$version"; then
-    echo "Refusing to overwrite immutable documentation snapshot $version" >&2
-    exit 1
+    if [ "$allow_overwrite" != true ]; then
+      echo "Refusing to overwrite immutable documentation snapshot $version" >&2
+      exit 1
+    fi
+
+    staging="$(mktemp -d "$site_dir/.incoming-$version.XXXXXX")"
+    backup="$(mktemp -d "$site_dir/.previous-$version.XXXXXX")"
+    cleanup() {
+      if [ -n "$backup" ] && [ -d "$backup/snapshot" ] && [ ! -e "$site_dir/$version" ]; then
+        mv "$backup/snapshot" "$site_dir/$version"
+      fi
+      if [ -n "$staging" ] && [ -d "$staging" ]; then
+        rm -rf -- "$staging"
+      fi
+      if [ -n "$backup" ] && [ -d "$backup" ]; then
+        rm -rf -- "$backup"
+      fi
+    }
+    trap cleanup EXIT
+    trap 'exit 1' HUP INT TERM
+    cp -R "$source_dir/$version/." "$staging/"
+    chmod 755 "$staging"
+    mv "$site_dir/$version" "$backup/snapshot"
+    mv "$staging" "$site_dir/$version"
+    staging=''
+    rm -rf -- "$backup"
+    backup=''
+    trap - EXIT
   fi
 else
   staging="$(mktemp -d "$site_dir/.incoming-$version.XXXXXX")"

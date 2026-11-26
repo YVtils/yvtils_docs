@@ -4,6 +4,12 @@ on:
   repository_dispatch:
     types: [collection-release]
   workflow_dispatch:
+    inputs:
+      allow_snapshot_overwrite:
+        description: Overwrite an existing documentation snapshot with different content
+        required: false
+        type: boolean
+        default: false
 
 # Serialize releases without cancelling a running deployment.
 concurrency:
@@ -205,11 +211,12 @@ jobs:
           REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
           REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          ALLOW_SNAPSHOT_OVERWRITE: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_snapshot_overwrite }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: DOCS_IMAGE,DEPLOY_DIR,REGISTRY_URL,REGISTRY_USERNAME,REGISTRY_PASSWORD,COMPOSE_CONFIG
+          envs: DOCS_IMAGE,DEPLOY_DIR,REGISTRY_URL,REGISTRY_USERNAME,REGISTRY_PASSWORD,ALLOW_SNAPSHOT_OVERWRITE,COMPOSE_CONFIG
           script: |
             set -eu
             : "${DEPLOY_DIR:?DEPLOY_DIR is required}"
@@ -220,6 +227,7 @@ jobs:
             docker pull "$DOCS_IMAGE"
             docker volume create yvtils-docs-content
             docker run --rm \
+              --env DOCS_ALLOW_OVERWRITE="$ALLOW_SNAPSHOT_OVERWRITE" \
               --mount type=volume,source=yvtils-docs-content,target=/site \
               --entrypoint /bin/sh "$DOCS_IMAGE" /usr/local/bin/publish-docs
             printf '%s' "$COMPOSE_CONFIG" | base64 -d > compose.yml

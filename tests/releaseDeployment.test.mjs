@@ -56,8 +56,8 @@ test('deployment retains archives, is idempotent, rejects mutation, and prevents
     writeFileSync(join(root, 'release-version'), `${version}\n`)
     return root
   }
-  const publish = (root) => spawnSync('sh', [publishScript], {
-    env: { ...process.env, DOCS_SOURCE_DIR: root, DOCS_SITE_DIR: site },
+  const publish = (root, allowOverwrite = 'false') => spawnSync('sh', [publishScript], {
+    env: { ...process.env, DOCS_SOURCE_DIR: root, DOCS_SITE_DIR: site, DOCS_ALLOW_OVERWRITE: String(allowOverwrite) },
     encoding: 'utf8',
   })
   const initial = source('v26.10.01')
@@ -80,6 +80,9 @@ test('deployment retains archives, is idempotent, rejects mutation, and prevents
   assert.notEqual(mutation.status, 0)
   assert.match(mutation.stderr, /Refusing to overwrite immutable/)
   assert.equal(readFileSync(join(site, 'v26.10.01', 'index.html'), 'utf8'), 'v26.10.01')
+  assert.notEqual(publish(source('v26.10.01', 'invalid overwrite flag'), 'yes').status, 0)
+  assert.equal(publish(source('v26.10.01', 'updated content'), 'true').status, 0)
+  assert.equal(readFileSync(join(site, 'v26.10.01', 'index.html'), 'utf8'), 'updated content')
   const invalid = source('v26.12.01')
   writeFileSync(join(invalid, 'release-version'), '../escape\n')
   assert.notEqual(publish(invalid).status, 0)

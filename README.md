@@ -104,8 +104,10 @@ and the production build on pull requests and pushes to `main`.
 repository dispatch or manually from the selected `main` ref. Manual runs need
 no inputs: they use the docs version in `docsVersions.ts` and the selected ref's
 commit, skipping Collection release/tag validation and docs-tag creation. The
-deployed snapshot remains immutable; a manual run cannot overwrite an existing
-version with different content. Repository dispatches still require this payload:
+deployed snapshot remains immutable by default. Manual runs can opt in to
+overwriting an existing version with different content using the
+`allow_snapshot_overwrite` input; repository dispatches never enable this
+option. Repository dispatches still require this payload:
 
 ```json
 {
